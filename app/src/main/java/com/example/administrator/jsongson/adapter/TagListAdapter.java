@@ -7,23 +7,21 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.administrator.jsongson.R;
-import com.example.administrator.jsongson.bean.Book;
+import com.example.administrator.jsongson.bean.Tag;
 
 import java.util.ArrayList;
 
 /**
- * Created by Administrator on 2016/3/15.
+ * Created by Administrator on 2016/3/16.
  */
-public class BookListAdapter extends BaseAdapter{
-    private Context c;
-    private ArrayList<Book> list;
+public class TagListAdapter extends BaseAdapter {
 
-    /**
-     * 构造方法
-     */
-    public BookListAdapter(Context context,ArrayList<Book> books) {
-        this.c = context;
-        this.list = books;
+    private Context c;
+    private ArrayList<Tag> list;
+
+    public TagListAdapter(Context c, ArrayList<Tag> list) {
+        this.c = c;
+        this.list = list;
     }
 
     @Override
@@ -46,19 +44,21 @@ public class BookListAdapter extends BaseAdapter{
 
         ViewHolder holder = null;
         if (holder == null){
-            convertView = View.inflate(c, R.layout.item_list,null);
+            convertView = View.inflate(c, R.layout.tag_item_list,null);
+            //实例化holder
             holder = new ViewHolder();
             holder.tv = (TextView) convertView.findViewById(R.id.tv);
+
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder) convertView.getTag();
         }
-        Book book = list.get(position);
-        holder.tv.setText("<<"+book.getTitle()+">>"+"\n"+book.getPublisher());
+        Tag tag = list.get(position);
+        holder.tv.setText(tag.getTitle()+"\n"+tag.getCount());
         return convertView;
     }
 
     class ViewHolder{
-     TextView tv;
+        TextView tv;
     }
 }

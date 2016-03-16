@@ -13,7 +13,12 @@ import com.example.administrator.jsongson.adapter.BookListAdapter;
 import com.example.administrator.jsongson.bean.Book;
 import com.example.administrator.jsongson.bean.Tag;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
@@ -21,8 +26,10 @@ import java.util.ArrayList;
  *
  * 数据地址：https://api.douban.com/v2/book/1220562
  *
+ * 解析一级节点 json array
+ *
  */
-public class MainActivity extends AppCompatActivity {
+public class JsonArrayActivity extends AppCompatActivity {
 
     private String url = "https://api.douban.com/v2/book/1220562";
     private ListView lv;
@@ -32,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         lv = (ListView) findViewById(R.id.lv);
         getData();//请求数据方法
     }
@@ -45,7 +53,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("info",s);
 
                 //2 解析数据
-                dealData(s);
+                try {
+                    dealData(s);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
         }, new Response.ErrorListener() {
@@ -58,19 +70,21 @@ public class MainActivity extends AppCompatActivity {
         new Volley().newRequestQueue(getApplicationContext()).add(request);
     }
 
-    private void dealData(String result) {
+    private void dealData(String result) throws JSONException {
         //1 创建Gson对象
         Gson gson = new Gson();
-        //2 把json数据解析成实体
+//        //2 把json数据解析成实体
         Book book = gson.fromJson(result,Book.class);
-        //3 查看解析的结果
-        Log.i("info","书名："+book.getTitle()+","+"出版社："+book.getPublisher()+","+"标签:"+book.getTags().size());
+//        //3 查看解析的结果
+//        Log.i("info", "书名：" + book.getTitle() + "," + "出版社：" + book.getPublisher() + "," + "标签:" + book.getTags().size());
 
-        //解析Tags数组
-        ArrayList<Tag> tags = gson.fromJson(9:35)
+        //4 对象添加到Arraylist,
+        ArrayList<Book> books = new ArrayList<Book>();
 
+        books.add(book);
 
-
+        adapter = new BookListAdapter(this,books);
+        lv.setAdapter(adapter);
 
     }
 }
